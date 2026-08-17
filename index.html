@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Form</title>
+</head>
+
+<body>
+
+    <form action="" method="post">
+       <input type="text" id="class" placeholder="Class Name">
+<input type="number" id="count" placeholder="Count">
+
+<button onclick="insert()">Insert</button>
+
+<button onclick="update()">Update</button>
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Class Name</th>
+                <th>Count</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+
+
+
+    <script>
+        const baseUrl = "http://localhost:9090/api/v1/";
+
+        function insert(){
+            const data = {
+                className: document.getElementById("class").value,
+                count: document.getElementById("count").value
+            };
+
+            fetch("http://localhost:9090/api/v1/insert",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(data)
+            })
+            .then(()=>{
+                alert("Inserted");
+                getAll();
+            })
+            .catch(err=>console.log(err));
+}
+
+       function getAll(){
+        fetch(baseUrl + "all")
+        .then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+        let rows="";
+        data.forEach(item=>{
+           
+            rows += `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.className}</td>
+                <td>${item.count}</td>
+
+                <td>
+                    <button onclick="deleteClass(${item.id})">Delete</button>
+                    <button onclick="getOne(${item.id})">Edit</button>
+                </td>
+            </tr>
+            `;
+
+        });
+
+        document.getElementById("tableBody").innerHTML = rows;
+
+    });
+
+}
+        function deleteClass(id){
+        fetch(baseUrl + "delete/" + id,{
+        method:"DELETE"
+        })
+        .then(()=>{
+            alert("Deleted");
+            getAll();
+        });
+
+}
+        function update(){
+        const data = {
+            className: document.getElementById("class").value,
+            count: document.getElementById("count").value
+            };
+
+        fetch(baseUrl + "update/" + updateId,{
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(data)
+    })
+    .then(()=>{
+        alert("Updated");
+        getAll();
+    });
+
+}
+
+
+        getAll();
+
+    </script>
+</body>
+
+</html>
