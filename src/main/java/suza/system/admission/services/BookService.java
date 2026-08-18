@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import suza.system.admission.models.Book;
 import suza.system.admission.repositories.BookRepository;
+import suza.system.admission.exceptions.ResourceNotFoundException;
 
 @Service
 public class BookService {
@@ -38,7 +39,7 @@ public class BookService {
 
         return bookRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Book not found"));
+                        new ResourceNotFoundException("Book not found"));
     }
 
     public Book getByBookName(String name) {
@@ -47,9 +48,9 @@ public class BookService {
                 .orElse(null);
     }
 
-    public List<Book> getByAuthor(String author) {
+    public List<Book> getByAuthor(Long authorId) {
 
-        return bookRepository.findByAuthor(author);
+        return bookRepository.findByAuthorId(authorId);
     }
 
     public List<Book> searchBooks(String keyword) {
@@ -81,7 +82,7 @@ public class BookService {
 
         Book exist = bookRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Book not found"));
+                        new ResourceNotFoundException("Book not found"));
 
         exist.setBookName(book.getBookName());
         exist.setAuthor(book.getAuthor());
@@ -97,7 +98,7 @@ public class BookService {
 
         Book exist = bookRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Book not found"));
+                        new ResourceNotFoundException("Book not found"));
 
         if (book.getBookName() != null) {
 
@@ -122,7 +123,7 @@ public class BookService {
 
         Book book = bookRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Book not found"));
+                        new ResourceNotFoundException("Book not found"));
 
         bookRepository.delete(book);
     }
@@ -169,9 +170,9 @@ public class BookService {
         return bookRepository.count();
     }
 
-    public long countByAuthor(String author) {
+    public long countByAuthor(Long authorId) {
 
-        return bookRepository.countByAuthor(author);
+        return bookRepository.countByAuthorId(authorId);
     }
 
     // =========================
@@ -188,11 +189,11 @@ public class BookService {
     // =========================
 
     public List<Book> getByAuthorAndBookName(
-            String author,
+            Long authorId,
             String name) {
 
-        return bookRepository.findByAuthorAndBookName(
-                author,
+        return bookRepository.findByAuthorIdAndBookName(
+                authorId,
                 name);
     }
 
@@ -200,9 +201,9 @@ public class BookService {
     // CUSTOM QUERY
     // =========================
 
-    public List<Book> customAuthorSearch(String author) {
+    public List<Book> customAuthorSearch(Long authorId) {
 
-        return bookRepository.getBooksByAuthor(author);
+        return bookRepository.getBooksByAuthorId(authorId);
     }
 
     // =========================

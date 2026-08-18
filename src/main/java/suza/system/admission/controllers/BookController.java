@@ -52,9 +52,9 @@ public class BookController {
         return book != null ? ResponseEntity.ok(book) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/author/{author}")
-    public ResponseEntity<List<Book>> getByAuthor(@PathVariable String author) {
-        return ResponseEntity.ok(bookService.getByAuthor(author));
+    @GetMapping("/author/{authorId}")
+    public ResponseEntity<List<Book>> getByAuthor(@PathVariable Long authorId) {
+        return ResponseEntity.ok(bookService.getByAuthor(authorId));
     }
 
     @GetMapping("/search/{keyword}")
@@ -155,10 +155,10 @@ public class BookController {
         return ResponseEntity.ok(bookService.totalBooks());
     }
 
-    @GetMapping("/count/{author}")
+    @GetMapping("/count/author/{authorId}")
     public ResponseEntity<Long> countByAuthor(
-            @PathVariable String author) {
-        return ResponseEntity.ok(bookService.countByAuthor(author));
+            @PathVariable Long authorId) {
+        return ResponseEntity.ok(bookService.countByAuthor(authorId));
     }
 
     // =========================
@@ -177,19 +177,19 @@ public class BookController {
 
     @GetMapping("/filter")
     public ResponseEntity<List<Book>> filter(
-            @RequestParam String author,
+            @RequestParam Long authorId,
             @RequestParam String name) {
-        return ResponseEntity.ok(bookService.getByAuthorAndBookName(author, name));
+        return ResponseEntity.ok(bookService.getByAuthorAndBookName(authorId, name));
     }
 
     // =========================
     // CUSTOM QUERY
     // =========================
 
-    @GetMapping("/custom/{author}")
+    @GetMapping("/custom/{authorId}")
     public ResponseEntity<List<Book>> customQuery(
-            @PathVariable String author) {
-        return ResponseEntity.ok(bookService.customAuthorSearch(author));
+            @PathVariable Long authorId) {
+        return ResponseEntity.ok(bookService.customAuthorSearch(authorId));
     }
 
     // =========================

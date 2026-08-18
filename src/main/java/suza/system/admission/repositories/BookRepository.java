@@ -16,8 +16,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     // Find book by exact name
     Optional<Book> findByBookName(String bookName);
 
-    // Find books by author
-    List<Book> findByAuthor(String author);
+    // Find books by author ID
+    List<Book> findByAuthorId(Long authorId);
 
     // Find books containing a keyword
     List<Book> findByBookNameContaining(String keyword);
@@ -40,8 +40,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     // Latest 5 books
     List<Book> findTop5ByOrderByIdDesc();
 
-    // Count books by author
-    long countByAuthor(String author);
+    // Count books by author ID
+    long countByAuthorId(Long authorId);
 
     // Check existence
     boolean existsByBookName(String bookName);
@@ -49,17 +49,17 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     // Delete by name
     void deleteByBookName(String bookName);
 
-    // Search by author and book name
-    List<Book> findByAuthorAndBookName(
-            String author,
+    // Search by author ID and book name
+    List<Book> findByAuthorIdAndBookName(
+            Long authorId,
             String bookName);
 
     // Pagination
     Page<Book> findAll(Pageable pageable);
 
     // Custom JPQL query
-    @Query("SELECT b FROM Book b WHERE b.author = :author")
-    List<Book> getBooksByAuthor(
-            @Param("author") String author);
+    @Query("SELECT b FROM Book b WHERE b.author.id = :authorId")
+    List<Book> getBooksByAuthorId(
+            @Param("authorId") Long authorId);
 
 }
